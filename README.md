@@ -1,12 +1,12 @@
 # Instalación
 ## Descargar
-Desde la línea de comando cmd\
+Desde la línea de comando cmd
 ```
 cd <directorio de instalación>
 ```
 En el directorio donde desea instalar
 ```
-'git clone --no-checkout https://github.com/juanmedina-seti/sec_ai.git sec_ai' 
+git clone --no-checkout https://github.com/juanmedina-seti/sec_ai.git sec_ai
 ```
 ## Crear ambiente python
 ```
