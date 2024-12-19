@@ -79,3 +79,7 @@
 2024-12-18 22:12:00,297 - INFO - azuresearch.py:27 - Get Index idx_security_survey
 2024-12-18 22:12:17,853 - INFO - Carga_inicial.py:20 - Carga inicial.py
 2024-12-18 22:12:19,762 - INFO - Nueva.py:16 - Nueva.py
+2024-12-19 08:21:16,923 - INFO - Busqueda.py:21 - Busqueda.py
+2024-12-19 08:23:30,515 - INFO - Busqueda.py:21 - Busqueda.py
+2024-12-19 08:24:33,074 - INFO - Busqueda.py:21 - Busqueda.py
+2024-12-19 08:24:45,906 - INFO - Busqueda.py:21 - Busqueda.py
