@@ -2,7 +2,7 @@
 #DATA
 #data
 log/
-log
+log/app.log
 
 # Distribution / packaging
 .Python
