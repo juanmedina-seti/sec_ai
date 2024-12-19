@@ -1,5 +1,7 @@
-Para instalar
-git clone https://github.com/juanmedina-seti/sec_ai.git sec_ai
+Para instalar.
+Desde la línea de comando cmd
+cd <directorio de instalación>
+git clone --no-checkout https://github.com/juanmedina-seti/sec_ai.git sec_ai
 
 cd sec_id
 python -m venv .venv
