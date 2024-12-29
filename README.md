@@ -12,7 +12,7 @@ cd ./python_apps
 ```
 En el directorio donde desea instalar *c:/pyathon_apps*
 ```
-git clone --no-checkout https://github.com/juanmedina-seti/sec_ai.git sec_ai
+git clone https://github.com/juanmedina-seti/sec_ai.git sec_ai
 ```
 ## Crear ambiente python
 ```
