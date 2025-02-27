@@ -27,7 +27,7 @@ en caso de no encontrar python utilice
 ## Activar e instalar librerías requeridad
 En el directorio *sec_ai*
 ```
-venv\Scripts\activate.bat
+.venv\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 
