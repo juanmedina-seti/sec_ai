@@ -12,7 +12,7 @@ cd ./python_apps
 ```
 En el directorio donde desea instalar *c:/pyathon_apps*
 ```
-git clone --no-checkout https://github.com/juanmedina-seti/sec_ai.git sec_ai
+git clone https://github.com/juanmedina-seti/sec_ai.git sec_ai
 ```
 ## Crear ambiente python
 ```
@@ -27,7 +27,7 @@ en caso de no encontrar python utilice
 ## Activar e instalar librerías requeridad
 En el directorio *sec_ai*
 ```
-venv\Scripts\activate.bat
+.venv\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 
