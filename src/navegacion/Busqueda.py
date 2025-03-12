@@ -25,22 +25,10 @@ vector_store_key = os.environ.get("AZURE_SEARCH_ADMIN_KEY")
 index_name = os.environ.get("AZURE_SEARCH_INDEX_NAME") 
 embedding_model = os.environ.get("EMBEDDING_MODEL_QA")
 
-PROMPT_TEMPLATE = """
-Eres un analista de seguridad de la compañía llamada SETI, debes responder unas 
-preguntas de seguridad a un cliente, anteriormente se han respondido las siguientes
-preguntas similares así:
-
-{context}
-
----
-
-Ahora basado en las pregunta anteriores responde esta: {question}
-"""
-
 
 #llm = ChatGoogleGenerativeAI(model="gemini-pro",temperature=0)
 #model = llm
-    
+st    
 embedding_function = get_embedding_function(embedding_model)
 #db = Chroma(persist_directory=chroma_path, embedding_function=embedding_function)
 
