@@ -44,29 +44,30 @@ with st.form("search_form"):
 
             if total_count > 0:
                 df = pd.DataFrame([result for result in results])
-                st.dataframe(df)  # Display results
+                
+                # Process metadata and create a new DataFrame for better display
+                metadata_list = []
+                print(df.head(2))
+                metadata:dict= json.loads(df.iloc[0]["metadata"])
+                print(metadata)
+                columns = ["id","content"]+list(metadata.keys())
 
-                # Add edit/delete buttons for each row
                 for index, row in df.iterrows():
-                    key = row["id"]
-                    col1, col2, col3 = st.columns([1, 1, 1]) # For better layout of buttons
-                    with col1:
-                        if st.button(f"Editar ({key})"):
-                            # Open the edit form with pre-filled data (using a modal or a new page)
-                            st.write(f"Editando documento con clave: {key}")
-                            # Add code here to open a modal or navigate to another page for editing
-                            # ... (see edit form below) ...
+                    try:
+                        metadata["id"] = row["id"]  # Add the ID for reference
+                        metadata["content"] = row ["content"]
+                        metadata = json.loads(row["metadata"])
 
-                    with col2:
-                        if st.button(f"Eliminar ({key})"):
-                            try:
-                                search_client.delete_documents([{"id": key}])
-                                st.success(f"Documento {key} eliminado.")
-                            except Exception as e:
-                                st.error(f"Error eliminando el documento: {e}")
+                        metadata_list.append(metadata)
+                    except (json.JSONDecodeError, KeyError) as e:
+                        st.error(f"Error processing metadata for row {index}: {e}")
+                        continue  # Skip rows with problematic metadata
 
-            else:
-                st.info("No se encontraron resultados.")
+                metadata_df = pd.DataFrame(metadata_list,columns=columns)
+
+                st.dataframe(metadata_df,hide_index=True,)
+                if not metadata_df.empty:
+                    st.info("No se encontraron resultados.")
 
         except Exception as e:
             st.error(f"Error buscando documentos: {e}")

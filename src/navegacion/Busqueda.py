@@ -26,11 +26,9 @@ index_name = os.environ.get("AZURE_SEARCH_INDEX_NAME")
 embedding_model = os.environ.get("EMBEDDING_MODEL_QA")
 
 
-#llm = ChatGoogleGenerativeAI(model="gemini-pro",temperature=0)
-#model = llm
-st    
+search_type=st.selectbox("Tipo Consulta",["hybrid","similarity"])    
 embedding_function = get_embedding_function(embedding_model)
-#db = Chroma(persist_directory=chroma_path, embedding_function=embedding_function)
+
 
 
 db: AzureSearch = AzureSearch(
@@ -46,7 +44,7 @@ st.header("Analista de Seguridad SETI")
 query_text = st.text_area("Ingrese la pregunta ")
 if(st.button("Enviar pregunta")):
     
-        results = db.similarity_search(query_text, k=2,search_type="hybrid")
+        results = db.similarity_search(query_text, k=2,search_type=search_type)
         
         context_text = "\n\n---\n\n".join([f"{doc.page_content}:  {doc.metadata['detalle']}" for doc in results])
         #sources = "\n\n---\n\n".join([f"{doc.metadata['filename']}:{doc.metadata['line_number']}:" for doc, _score in results])
