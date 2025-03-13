@@ -54,13 +54,13 @@ if(st.button("Enviar pregunta")):
 
             # Use expander to show details (collapsible)
             with st.expander("",expanded=True):
-                st.write(f"**{doc.page_content}**")  # Make question a subheader
-                st.write(f"**Respuesta:** {doc.metadata.get('respuesta', 'N/A')}")  # Handle missing data
-                st.write(f"**Detalle:** {doc.metadata.get('detalle', 'N/A')}")
-                st.write(f"**Fecha:** {doc.metadata.get('fecha', 'N/A')}")
-                st.write(f"**Cliente:** {doc.metadata.get('cliente', 'N/A')}")
-                st.write(f"**Tema:** {doc.metadata.get('tema', 'N/A')}")
-                st.write(f"**Categoría:** {doc.metadata.get('categoria', 'N/A')}")
+                st.markdown(f"**{doc.metadata.get('pregunta', 'N/A')}**")  # Make question a subheader
+                st.markdown(f"**Respuesta:** {doc.metadata.get('respuesta', 'N/A')}")  # Handle missing data
+                st.markdown(f"**Detalle:** {doc.metadata.get('detalle', 'N/A')}")
+                st.markdown(f"**Fecha:** {doc.metadata.get('fecha', 'N/A')}")
+                st.markdown(f"**Cliente:** {doc.metadata.get('cliente', 'N/A')}")
+                st.markdown(f"**Tema:** {doc.metadata.get('tema', 'N/A')}")
+                st.markdown(f"**Categoría:** {doc.metadata.get('categoria', 'N/A')}")
 
         #prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
         #prompt = prompt_template.format(context=context_text, question=query_text)

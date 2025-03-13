@@ -9,7 +9,7 @@ pg = st.navigation(
         "Buscar": [st.Page("navegacion/Busqueda.py", title="Búsqueda",)],
         "Administración": [st.Page("navegacion/azuresearch.py",title="Base de datos" ),
                            st.Page("navegacion/Carga_inicial.py",title="Carga inicial" ),
-                           st.Page("navegacion/Nueva.py",title="Nueva Pregunta" ),
+                          # st.Page("navegacion/Nueva.py",title="Nueva Pregunta" ),
                            st.Page("navegacion/Explorar.py",title="Explorar" )
                            ]
                            

@@ -25,6 +25,7 @@ vector_store_key = os.environ.get("AZURE_SEARCH_ADMIN_KEY")
 embedding_model = os.environ.get("EMBEDDING_MODEL_QA")
 excel_file_path = os.environ.get("EXCEL_FILE_PATH")
 index_name = os.environ.get("AZURE_SEARCH_INDEX_NAME") 
+logger.info(f"embedding model: {embedding_model}")
 
 embedding_function = get_embedding_function(embedding_model)
 
@@ -37,7 +38,7 @@ if uploaded_file is not None:
     try:
         df = pd.read_excel(uploaded_file)
         st.write("Data Preview:")
-        st.dataframe(df.head())  # Display a preview of the data
+        st.dataframe(df.head(),hide_index=True)  # Display a preview of the data
         faltantes=[col for col in FIELDS if col not in df.columns]
         if len(faltantes) > 0:
             st.write(f"No se encontraron la(s) columna(s): {str(faltantes)}" )
@@ -55,39 +56,39 @@ if uploaded_file is not None:
 
         documents = []
         ids = []
-        for index, row in df.iterrows():
-            # Generate a unique ID for each document
-            doc_id = str(row["Id"])
-            logger.debug("Doc ID",doc_id)
-            # Process only rows with sufficient data in "Pregunta"
-            if not pd.isna(row["Pregunta"]) and len(str(row["Pregunta"])) > 30 and not pd.isna(row["Detalle"]) and len(str(row["Detalle"])) >10: 
-                content = str(row['Pregunta'])
-                
-                metadata = {
-                    "respuesta": row["Respuesta"],
-                    "detalle": row ["Detalle"],
-                    "categoria": row["Categoria"],
-                    "tema": row["Tema"],
-                    "cliente": row["Cliente"],
-                    "fecha": str(row["Fecha"]),
-                }
-                logger.debug("Metadata",row.to_list())
-                documents.append(Document(page_content=content, metadata=metadata))
-                logger.debug("Len",len(documents))
-                ids.append(doc_id)
+        if st.button("Cargar datos"):
+            for index, row in df.iterrows():
+                # Generate a unique ID for each document
+                doc_id = str(row["Id"])
+                logger.debug("Doc ID",doc_id)
+                # Process only rows with sufficient data in "Pregunta"
+                if not pd.isna(row["Pregunta"]) and len(str(row["Pregunta"])) > 30  and not pd.isna(row["Detalle"]) and len(str(row["Detalle"])) >10: 
+                    content = str(row['Pregunta']) + " " +str(row['Detalle'])
+                    metadata = {
+                        "pregunta": row ["Pregunta"],
+                        "respuesta": row["Respuesta"],
+                        "detalle": row ["Detalle"],
+                        "categoria": row["Categoria"],
+                        "tema": row["Tema"],
+                        "cliente": row["Cliente"],
+                        "fecha": str(row["Fecha"]),
+                    }
+                    logger.debug("Metadata",row.to_list())
+                    documents.append(Document(page_content=content, metadata=metadata))
+                    logger.debug("Len",len(documents))
+                    ids.append(doc_id)
 
-        if documents: # Check if any documents were created (handles empty files gracefully)
-            batch_size = 30 # Adjust batch size as needed. Smaller values are safer if you have memory limitations.
-            my_bar = st.progress(0, text="Cargando ...")
-            for i in range(0, len(documents), batch_size):
-               # st.info(f"Adding documents {i} to {min(i+batch_size, len(documents))}")
-                vector_store.add_documents(documents=documents[i : i + batch_size], ids=ids[i : i + batch_size])
-                my_bar.progress(int(i/len(documents)*100), text=f"Cargando de {i} a {min(i+batch_size, len(documents))} de {len(documents)}")
-            my_bar.progress(100, text=f"Cargando")
-            st.success(f"Successfully added {len(documents)} documents to the index.")
+            if documents: # Check if any documents were created (handles empty files gracefully)
+                batch_size = 30 # Adjust batch size as needed. Smaller values are safer if you have memory limitations.
+                my_bar = st.progress(0, text="Cargando ...")
+                for i in range(0, len(documents), batch_size):
+                    vector_store.add_documents(documents=documents[i : i + batch_size], ids=ids[i : i + batch_size])
+                    my_bar.progress(int(i/len(documents)*100), text=f"Cargando de {i} a {min(i+batch_size, len(documents))} de {len(documents)}")
+                my_bar.progress(100, text=f"Cargando")
+                st.success(f"Successfully added {len(documents)} documents to the index.")
 
-        else:
-             st.warning("No documents were created. Make sure the Excel file is formatted correctly and contains data in the 'Pregunta' column.")
+            else:
+                st.warning("No documents were created. Make sure the Excel file is formatted correctly and contains data in the 'Pregunta' column.")
 
     except Exception as e:
         st.error(f"An error occurred: {e}")

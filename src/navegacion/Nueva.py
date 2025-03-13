@@ -34,6 +34,7 @@ embedding_function = get_embedding_function(embedding_model)
 # Create
 st.header("Nueva pregunta")
 with st.form("create_form"):
+    id = st.number_input("Id",)
     pregunta = st.text_input("Pregunta")
     respuesta = st.text_input("Respuesta")
     detalle = st.text_area("Detalle")
@@ -44,8 +45,9 @@ with st.form("create_form"):
     create_submitted = st.form_submit_button("Crear")
 
     if create_submitted:
-        vector = embedding_function([pregunta])  # Generate embedding
+        vector = embedding_function([pregunta+ " " + detalle])  # Generate embedding
         metadata = {
+            "pregunta": pregunta,
             "respuesta": respuesta,
             "detalle": detalle,
             "categoria": categoria,
@@ -54,12 +56,13 @@ with st.form("create_form"):
             "fecha": fecha.isoformat(), # Store as string
         }        
         document = {
-            "content": pregunta,
+            "content": pregunta + ": "+ detalle,
             "metadata": metadata,
-            "content_vector": vector # Add the embedding to the document
+            "content_vector": vector, # Add the embedding to the document
+            "id": id
         }
         try:
-            result = search_client.upload_documents([document])
+            result = search_client.upload_documents([document],)
             st.success(f"Document created with key: {result[0].key}")
         except Exception as e:
             st.error(f"Error creating document: {e}")

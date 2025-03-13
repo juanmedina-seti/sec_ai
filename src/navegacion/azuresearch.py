@@ -72,6 +72,7 @@ if index_name: #only run if index name is defined in .env
        
     else:
         st.error(index_status)
+        #st.page_link(st.Page("navegacion/Carga_inicial.py",title="Carga inicial" ))
 
 else:
     logger.error("Index name not specified in environment variables.")
