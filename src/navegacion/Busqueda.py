@@ -5,7 +5,6 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_core.prompts import PromptTemplate
 #from langchain_google_genai import ChatGoogleGenerativeAI
 
-import azure.identity
 from langchain_community.vectorstores.azuresearch import AzureSearch
 
 from dotenv import load_dotenv
@@ -24,9 +23,10 @@ vector_store_address = os.environ.get("AZURE_SEARCH_SERVICE")
 vector_store_key = os.environ.get("AZURE_SEARCH_ADMIN_KEY")
 index_name = os.environ.get("AZURE_SEARCH_INDEX_NAME") 
 embedding_model = os.environ.get("EMBEDDING_MODEL_QA")
+search_type = os.environ.get("SEARCH_TYPE", "hybrid")  # Default to "hybrid" if not set
+k_value = int(os.environ.get("K_VALUE", 2)) 
 
 
-search_type=st.selectbox("Tipo Consulta",["hybrid","similarity"])    
 embedding_function = get_embedding_function(embedding_model)
 
 
@@ -44,11 +44,12 @@ st.header("Analista de Seguridad SETI")
 query_text = st.text_area("Ingrese la pregunta ")
 if(st.button("Enviar pregunta")):
     
-        results = db.similarity_search(query_text, k=2,search_type=search_type)
+        results = db.similarity_search(query_text, k=k_value,search_type=search_type)
         
         context_text = "\n\n---\n\n".join([f"{doc.page_content}:  {doc.metadata['detalle']}" for doc in results])
         #sources = "\n\n---\n\n".join([f"{doc.metadata['filename']}:{doc.metadata['line_number']}:" for doc, _score in results])
-        st.header("Preguntas similares") 
+        st.header("Preguntas similares")
+        results.sort(key=lambda doc: doc.metadata.get('fecha'), reverse=True) 
         for doc in results:
             
 
