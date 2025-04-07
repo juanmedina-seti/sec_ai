@@ -47,26 +47,28 @@ with st.form("search_form"):
                 
                 # Process metadata and create a new DataFrame for better display
                 metadata_list = []
-                print(df.head(2))
+                #print(df.head(2))
                 metadata:dict= json.loads(df.iloc[0]["metadata"])
-                print(metadata)
+                #print(metadata)
                 columns = ["id","content"]+list(metadata.keys())
 
                 for index, row in df.iterrows():
                     try:
+
+                        metadata = json.loads(row["metadata"])
                         metadata["id"] = row["id"]  # Add the ID for reference
                         metadata["content"] = row ["content"]
-                        metadata = json.loads(row["metadata"])
-
                         metadata_list.append(metadata)
+                        print(f"metadata_list: {metadata}")
                     except (json.JSONDecodeError, KeyError) as e:
                         st.error(f"Error processing metadata for row {index}: {e}")
                         continue  # Skip rows with problematic metadata
 
                 metadata_df = pd.DataFrame(metadata_list,columns=columns)
+                print(metadata_df.head(2))
 
                 st.dataframe(metadata_df,hide_index=True,)
-                if not metadata_df.empty:
+                if metadata_df.empty:
                     st.info("No se encontraron resultados.")
 
         except Exception as e:

@@ -45,6 +45,14 @@ if uploaded_file is not None:
             raise IndexError("Faltan columnas en el excel ")
         if not df["Id"].is_unique:
             raise ValueError("El id debe ser único ")
+        try:
+            df['Fecha'] = pd.to_datetime(df['Fecha'], errors='raise')  # Raise error for invalid dates
+            df['Fecha'] = df['Fecha'].dt.strftime('%Y-%m-%d')  # Format to yyyy-mm-dd
+        except ValueError as e:
+            logger.error(f"Invalid date format in 'Fecha' column: {e}")
+            st.error(f"Invalid date format in 'Fecha' column. Please ensure dates are in a valid format.")
+            raise       
+
         
         vector_store = AzureSearch(
                 azure_search_endpoint=vector_store_address,
