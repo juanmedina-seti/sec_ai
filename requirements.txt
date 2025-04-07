@@ -3,4 +3,5 @@ pandas
 azure-storage-blob
 azure-identity
 azure-search-documents
+langchain-community
 openpyxl
